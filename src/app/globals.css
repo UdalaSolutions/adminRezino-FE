@@ -1,0 +1,85 @@
+@import 'tailwindcss';
+
+:root {
+	--background: #f3f3f3;
+	--foreground: #181818;
+	--primaryPurple: #7b5eac;
+	--primaryPink: #cb8ab2;
+	--secondaryPink: #e5cfdd;
+	--primaryRed: #fc0d0d;
+}
+
+/* Map CSS variables to Tailwind theme tokens */
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-primaryPurple: var(--primaryPurple);
+	--color-primaryPink: var(--primaryPink);
+	--color-secondaryPink: var(--secondaryPink);
+	--color-primaryRed: var(--primaryRed);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--color-background);
+	color: var(--color-foreground);
+	font-family: 'Gilda Display', serif;
+}
+
+button {
+	cursor: pointer;
+}
+
+/* Hide scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+.no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* Animations */
+@keyframes slideInLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-fade-in {
+	animation: fade-in 0.8s ease-out forwards;
+}
+
+@keyframes marquee {
+	0% {
+		transform: translateX(0%);
+	}
+	100% {
+		transform: translateX(-50%);
+	}
+}
+
+.animate-marquee {
+	display: inline-block;
+	min-width: 200%;
+	animation: marquee 50s linear infinite;
+}
