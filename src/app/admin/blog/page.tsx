@@ -204,7 +204,7 @@ const BlogManagement: React.FC = () => {
 	}
 
 	return (
-		<section className='min-h-screen py-6 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8 w-full'>
+		<section className='min-h-screen my-6 mx-2 md:mx-4 lg:mx-6'>
 			<div className=''>
 				{/* Header Section */}
 				<div className='bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-purple-100 p-6 sm:p-8 lg:p-10 mb-6 sm:mb-8'>

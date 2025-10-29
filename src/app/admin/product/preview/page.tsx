@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import AdminProductCard from '@/app/components/admin/productManagement/ProductCard';
-import ProductNavbar from '@/app/components/navbar/productNavbar';
 import ProductPagination from '@/app/components/pagination/productPagination';
 import EditProductModal from '@/app/components/admin/orderManagement/EditProductModal';
 import { Product } from '@/types/index';
@@ -67,13 +66,8 @@ const AdminProducts = () => {
 
 	return (
 		<>
-			<section className='my-8 mx-2 md:mx-4 lg:mx-8.5'>
+			<section className='my-6 mx-2 md:mx-4 lg:mx-6'>
 				<div className='flex flex-col gap-[32px] row-start-2 items-center sm:items-start min-w-full px-1 sm:px-0'>
-					<ProductNavbar
-						currentPage={currentPage}
-						totalPages={totalPages}
-					/>
-
 					{/* Admin Products Grid */}
 					<div className='w-full'>
 						<div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4'>

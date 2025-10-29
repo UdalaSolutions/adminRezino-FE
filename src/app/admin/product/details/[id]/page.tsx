@@ -85,7 +85,7 @@ const AdminProductsDetails = () => {
 		additional: (
 			<table className='w-full bg-white rounded-lg shadow-md overflow-hidden'>
 				<thead>
-					<tr className='bg-primaryPurple text-white'>
+					<tr className='bg-primaryPurple text-white!'>
 						<th className='text-left py-4 px-6 font-semibold'>Attribute</th>
 						<th className='text-left py-4 px-6 font-semibold'>Details</th>
 					</tr>
@@ -166,7 +166,7 @@ const AdminProductsDetails = () => {
 	};
 
 	return (
-		<div className='flex flex-col gap-8 row-start-2 items-center sm:items-start mx-2 md:mx-4 lg:mx-8.5 py-8 '>
+		<div className='flex flex-col gap-8 row-start-2 items-center sm:items-start my-6 mx-2 md:mx-4 lg:mx-6 '>
 			{/* Product Details */}
 			<div className='flex flex-col lg:flex-row gap-8 lg:gap-16 w-full items-start h-full'>
 				<div className='bg-white rounded-2xl p-4 lg:p-8 flex items-center justify-center shadow-md max-w-4xl flex-1'>
@@ -213,10 +213,10 @@ const AdminProductsDetails = () => {
 							<span className='min-w-[20px] text-center'>{quantity}</span>
 							<button className='cursor-pointer'>+</button>
 						</div>
-						<button className='bg-primaryPurple text-white px-6 py-3 rounded-lg w-full sm:w-auto hover:bg-primaryPurple/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'>
+						<button className='text-sm bg-primaryPurple text-white! px-4 py-3 rounded-lg w-full sm:w-auto hover:bg-primaryPurple/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'>
 							Add to Cart
 						</button>
-						<button className='border border-primaryPink bg-primaryPink text-white px-6 py-3 rounded-lg w-full sm:w-auto hover:bg-primaryPink/90 transition-colors'>
+						<button className='border border-primaryPink bg-primaryPink text-white! px-4 py-3 rounded-lg w-full sm:w-auto hover:bg-primaryPink/90 transition-colors'>
 							Add to Wishlist
 						</button>
 						<button className='border border-primaryPurple rounded-full p-3 bg-white flex items-center justify-center hover:bg-gray-50 transition-colors'>

@@ -1,6 +1,4 @@
-import AdminTopNav from '../components/navbar/adminTopBar';
-import AdminBottomNavbar from '../components/navbar/adminBottomBar';
-import Footer from '@/app/components/footer';
+import AdminShell from '../components/navbar/adminShell';
 
 export default function Layout({
 	children,
@@ -9,12 +7,7 @@ export default function Layout({
 }>) {
 	return (
 		<>
-			<header>
-				<AdminTopNav />
-				<AdminBottomNavbar />
-			</header>
-			<main>{children}</main>
-			<Footer />
+			<AdminShell>{children}</AdminShell>
 		</>
 	);
 }

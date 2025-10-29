@@ -40,6 +40,17 @@ export interface BlogPost {
 	dateCreated: number[];
 }
 
+export type Transaction = {
+	id: number;
+	paystackReference: string;
+	userEmail: string;
+	amount: number;
+	status: string;
+	channel?: string | null;
+	paidAt?: number[];
+	orderIds?: number[];
+};
+
 export interface ApiResponse {
 	data: {
 		posts: BlogPost[];
@@ -221,7 +232,6 @@ export const getAllNumberOfCustomers = async (): Promise<number> => {
 			}
 		);
 		const numberOfCustomers = response.data.data ?? 0;
-		console.log(numberOfCustomers);
 		return numberOfCustomers;
 	} catch (err: unknown) {
 		console.error('There was an error', err);
@@ -378,4 +388,83 @@ export const deleteBlogPost = async (postId: number) => {
 		}
 	);
 	return res.data;
+};
+
+/**
+ * Get the total number of pending order for the admin.
+ * @returns Number of customers.
+ * @throws Error if fetching fails.
+ */
+export const getAllNumberOfPendingOrder = async (): Promise<number> => {
+	try {
+		const token = getToken();
+		const response = await axios.get(
+			`${BASE_URL}/api/admin/order/get-all-number-of-order-pending`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+		const pendingOrder = response.data.data ?? 0;
+		return pendingOrder;
+	} catch (err: unknown) {
+		console.error('There was an error', err);
+		if (
+			typeof err === 'object' &&
+			err !== null &&
+			'response' in err &&
+			typeof (err as any).response?.data === 'string'
+		) {
+			throw new Error((err as any).response.data);
+		}
+		throw new Error('Failed to fetch number of pending orders');
+	}
+};
+
+/**
+ * Fetch all payment transactions (payment history) for admin.
+ * Returns an array of transactions (or empty array if none).
+ */
+export const getAllPayments = async (): Promise<Transaction[]> => {
+	try {
+		const token = getToken();
+		const response = await axios.get(
+			`${BASE_URL}/api/admin/payment/get-payment-history`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+
+		const payload: any = response.data ?? {};
+		const recentPayment: unknown =
+			payload.getAllTransaction ?? payload.data?.getAllTransaction ?? [];
+
+		if (Array.isArray(recentPayment)) {
+			return recentPayment as Transaction[];
+		}
+
+		return [];
+	} catch (err: unknown) {
+		console.error('Failed to fetch payments', err);
+
+		// Try to surface API error message if present
+		if (typeof err === 'object' && err !== null && 'response' in err) {
+			const anyErr = err as any;
+			const serverData = anyErr.response?.data;
+			if (serverData) {
+				const msg =
+					typeof serverData === 'string'
+						? serverData
+						: JSON.stringify(serverData);
+				throw new Error(msg);
+			}
+		}
+
+		throw new Error('Failed to fetch payment history');
+	}
 };

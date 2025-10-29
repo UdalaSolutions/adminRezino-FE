@@ -4,8 +4,8 @@ import './globals.css';
 import { Providers } from './providers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { MobileNavProvider } from './components/navbar/MobileNavContext';
 import SessionSyncWrapper from './components/SessionSyncWrapper';
+import 'antd/dist/reset.css';
 
 const gildaDisplay = Gilda_Display({
 	variable: '--font-gilda-display',
@@ -41,7 +41,7 @@ export default function RootLayout({
 						pauseOnHover
 						theme='light'
 					/>
-					<MobileNavProvider>{children}</MobileNavProvider>
+					{children}
 				</Providers>
 			</body>
 		</html>

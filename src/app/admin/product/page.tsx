@@ -172,13 +172,12 @@ const ProductManagement = () => {
 
 	return (
 		<>
-			<section className='my-8 mx-2 md:mx-4 lg:mx-8.5'>
-				<div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4'>
-					<h1 className='text-2xl font-bold mt-2'>Product Management</h1>
+			<section className='my-6 mx-2 md:mx-4 lg:mx-6'>
+				<div className='flex flex-col justify-end md:flex-row  items-start md:items-center gap-4 mb-4'>
 					<div className='flex gap-3 '>
 						<button
 							onClick={() => setIsAddModalOpen(true)}
-							className='bg-primaryPurple rounded-lg py-2.5 px-5 flex gap-2 items-center text-white font-medium hover:bg-primaryPurple/ transition-colors'>
+							className='bg-primaryPurple rounded-lg py-2.5 px-5 flex gap-2 items-center text-white! font-medium hover:bg-primaryPurple/ transition-colors'>
 							<span>+</span> Add new product
 						</button>
 						<button
@@ -216,11 +215,11 @@ const ProductManagement = () => {
 										className='h-4 w-4 text-primaryPurple rounded focus:ring-primaryPurple'
 									/>
 								</div>
-								<div className='text-lg font-bold'>Image</div>
-								<div className='text-lg font-bold'>Product Name</div>
-								<div className='text-lg font-bold'>Category</div>
-								<div className='text-lg font-bold'>Stock</div>
-								<div className='text-lg font-bold'>Price</div>
+								<div className='text-base font-bold'>Image</div>
+								<div className='text-base font-bold'>Product Name</div>
+								<div className='text-base font-bold'>Category</div>
+								<div className='text-base font-bold'>Stock</div>
+								<div className='text-base font-bold'>Price</div>
 							</div>
 							<div className='divide-y divide-gray-200'>
 								{currentProducts.map((product) => (
@@ -276,7 +275,7 @@ const ProductManagement = () => {
 										</div>
 										<div className='flex justify-center space-x-1'>
 											<button
-												className='p-2 text-lg hover:text-primaryPurple hover:bg-purple-50 rounded-lg transition-colors'
+												className='p-2 text-base hover:text-primaryPurple hover:bg-purple-50 rounded-lg transition-colors'
 												onClick={() => handleEditClick(product)}
 												aria-label='Edit product'>
 												<PencilSquareIcon className='h-6 w-6' />
@@ -329,7 +328,7 @@ const ProductManagement = () => {
 													className='w-16 h-16 object-cover rounded-lg border'
 												/>
 												<div>
-													<p className='font-bold text-base'>
+													<p className='font-bold text-sm'>
 														{product.productName}
 													</p>
 													<p className='text-xs text-gray-500'>
@@ -354,7 +353,7 @@ const ProductManagement = () => {
 											</div>
 											<div className='flex gap-2 pt-2'>
 												<button
-													className='p-2 text-lg hover:text-primaryPurple hover:bg-purple-50 rounded-lg transition-colors'
+													className='p-2 text-base hover:text-primaryPurple hover:bg-purple-50 rounded-lg transition-colors'
 													onClick={() => handleEditClick(product)}
 													aria-label='Edit product'>
 													<PencilSquareIcon className='h-5 w-5' />
