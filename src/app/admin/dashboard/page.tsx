@@ -212,26 +212,26 @@ const AdminDashboard = () => {
 					{statsData.map((stat) => (
 						<div
 							key={stat.title}
-							className='bg-white rounded-xl p-5 text-[#111111] border border-[#E4E9F1] shadow-sm flex items-center gap-4'>
+							className='bg-white rounded-xl p-5 text-[#111111] border border-[#E4E9F1] shadow-sm flex sm:flex-col items-start  gap-4'>
 							<div className='flex-shrink-0'>
 								<div className='w-12 h-12 rounded-lg flex items-center justify-center border border-[#E4E9F1] bg-white'>
 									<Icon
 										icon={stat.icon}
-										width='28'
-										height='28'
+										width='26'
+										height='26'
 										className={`${stat.iconColor}`}
 										aria-hidden
 									/>
 								</div>
 							</div>
 
-							<div className='flex-1 min-w-0'>
-								<p className='text-xl sm:text-2xl font-semibold leading-tight'>
+							<div className='flex-1 min-w-0 mt-2 sm:mt-3.5 '>
+								<p className='text-xl sm:text-2xl md:text-3xl leading-5 font-semibold '>
 									{stat.value}
 								</p>
-								<p className='text-sm text-[#555555] font-medium mt-1'>
+								<h5 className='text-sm md:text-[15px] text-[#555555] font-medium mt-2!'>
 									{stat.title}
-								</p>
+								</h5>
 
 								{/* Errors */}
 								{stat.title.includes('Customers') && customerError && (

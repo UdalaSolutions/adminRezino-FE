@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { Gilda_Display } from 'next/font/google';
-import './globals.css';
+import 'antd/dist/reset.css';
 import { Providers } from './providers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SessionSyncWrapper from './components/SessionSyncWrapper';
-import 'antd/dist/reset.css';
+import './globals.css';
 
 const gildaDisplay = Gilda_Display({
 	variable: '--font-gilda-display',
