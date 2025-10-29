@@ -387,7 +387,7 @@ const Login = () => {
 				<button
 					type='submit'
 					disabled={isLoading}
-					className='flex justify-center items-center gap-2 bg-primaryPurple text-white text-lg p-2.5 rounded-md hover:bg-primaryPurple/90 focus:outline-none focus:ring-2 focus:ring-primaryPurple focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'>
+					className='flex justify-center items-center gap-2 bg-primaryPurple text-white! text-lg p-2.5 rounded-md hover:bg-primaryPurple/90 focus:outline-none focus:ring-2 focus:ring-primaryPurple focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'>
 					{isLoading && (
 						<Image
 							src='/Icons/loader.svg'

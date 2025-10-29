@@ -32,7 +32,7 @@ const ForgotPassword = () => {
 
 					<button
 						type='submit'
-						className='flex justify-center items-center bg-primaryPurple text-white text-lg p-2.5 rounded-md hover:bg-primaryPurple/90 focus:outline-none focus:ring-2 focus:ring-primaryPurple focus:ring-offset-2 transition-colors'>
+						className='flex justify-center items-center bg-primaryPurple text-white! text-lg p-2.5 rounded-md hover:bg-primaryPurple/90 focus:outline-none focus:ring-2 focus:ring-primaryPurple focus:ring-offset-2 transition-colors'>
 						Send Code
 					</button>
 

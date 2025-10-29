@@ -102,7 +102,7 @@ const EmailVerification = () => {
 				<button
 					type='submit'
 					disabled={loading || !email.trim()}
-					className={`flex justify-center items-center bg-primaryPurple text-white text-lg p-2.5 rounded-md transition-colors min-h-[52px]
+					className={`flex justify-center items-center bg-primaryPurple text-white! text-lg p-2.5 rounded-md transition-colors min-h-[52px]
             ${
 							loading || !email.trim()
 								? 'opacity-50 cursor-not-allowed'

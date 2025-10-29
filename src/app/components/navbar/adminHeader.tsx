@@ -49,7 +49,7 @@ const AdminHeader: React.FC<Props> = ({
 
 				<div className='relative'>
 					<button
-						className='rounded-full h-10 w-10 flex items-center justify-center bg-primaryPurple text-white font-medium text-sm'
+						className='rounded-full h-10 w-10 flex items-center justify-center bg-primaryPurple text-white! font-medium text-sm'
 						title='Open profile'
 						onClick={() => {}}>
 						{userInitials || 'U'}

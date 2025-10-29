@@ -115,7 +115,7 @@ const OtpVerification = () => {
 				<button
 					type='submit'
 					disabled={loading}
-					className={`flex justify-center items-center bg-primaryPurple text-white text-lg p-2.5 rounded-md transition-colors
+					className={`flex justify-center items-center bg-primaryPurple text-white! text-lg p-2.5 rounded-md transition-colors
 						${
 							loading
 								? 'opacity-70 cursor-not-allowed'
