@@ -4,7 +4,6 @@ import 'antd/dist/reset.css';
 import { Providers } from './providers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import SessionSyncWrapper from './components/SessionSyncWrapper';
 import './globals.css';
 
 const gildaDisplay = Gilda_Display({
@@ -28,7 +27,6 @@ export default function RootLayout({
 		<html lang='en'>
 			<body className={`${gildaDisplay.variable} `}>
 				<Providers>
-					<SessionSyncWrapper />
 					<ToastContainer
 						position='top-right'
 						autoClose={3000}
