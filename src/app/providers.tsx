@@ -2,7 +2,6 @@
 
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { SessionProvider } from 'next-auth/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store, persistor } from '@/store';
 import { useState } from 'react';
@@ -21,12 +20,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 	);
 
 	return (
-		<SessionProvider>
-			<QueryClientProvider client={queryClient}>
-				<Provider store={store}>
-					<PersistGate persistor={persistor}>{children}</PersistGate>
-				</Provider>
-			</QueryClientProvider>
-		</SessionProvider>
+		<QueryClientProvider client={queryClient}>
+			<Provider store={store}>
+				<PersistGate persistor={persistor}>{children}</PersistGate>
+			</Provider>
+		</QueryClientProvider>
 	);
 }
