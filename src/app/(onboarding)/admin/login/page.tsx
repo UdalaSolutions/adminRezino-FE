@@ -44,20 +44,20 @@ const AdminLoginPage = () => {
 
 	useEffect(() => {
 		// Check if admin is already logged in
-		const checkExistingAuth = () => {
-			try {
-				const adminToken = localStorage.getItem('adminAuthToken');
-				const adminUserData = localStorage.getItem('adminUserData');
-				if (adminToken && adminUserData) {
-					router.push('/admin/dashboard');
-					return;
-				}
-			} catch (error) {
-				console.error('Error checking existing auth:', error);
-			}
-		};
+		// const checkExistingAuth = () => {
+		// 	try {
+		// 		const adminToken = localStorage.getItem('adminAuthToken');
+		// 		const adminUserData = localStorage.getItem('adminUserData');
+		// 		if (adminToken && adminUserData) {
+		// 			router.push('/admin/dashboard');
+		// 			return;
+		// 		}
+		// 	} catch (error) {
+		// 		console.error('Error checking existing auth:', error);
+		// 	}
+		// };
 
-		checkExistingAuth();
+		// checkExistingAuth();
 
 		// Check remember me preference
 		const remembered = localStorage.getItem('adminRememberMe') === 'true';
