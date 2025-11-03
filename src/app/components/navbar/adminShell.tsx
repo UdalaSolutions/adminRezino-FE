@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Modal, Button } from 'antd';
 import AdminHeader from './adminHeader';
 import AdminSidebar from './adminSidebar';
 
@@ -17,17 +16,6 @@ export default function AdminShell({ children }: Props) {
 	const [userData, setUserData] = useState<any>(null);
 	const [userInitials, setUserInitials] = useState('');
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [showTimeoutModal, setShowTimeoutModal] = useState(false);
-
-	const getTokenExpiry = (token: string) => {
-		try {
-			const payload = JSON.parse(atob(token.split('.')[1]));
-			return payload.exp ? payload.exp * 1000 : null;
-		} catch (e) {
-			console.error('Invalid token format', e);
-			return null;
-		}
-	};
 
 	useEffect(() => {
 		const checkAuth = () => {
@@ -37,20 +25,11 @@ export default function AdminShell({ children }: Props) {
 
 				if (adminToken && adminUserDataStr) {
 					const user = JSON.parse(adminUserDataStr);
-
-					// ROLE CHECK
 					const hasAdminRole =
 						user.adminRole === 'ADMIN' || user.role === 'ADMIN';
 
 					if (!hasAdminRole) {
 						router.push('/');
-						return;
-					}
-
-					// TOKEN EXPIRY CHECK
-					const expTime = getTokenExpiry(adminToken);
-					if (expTime && Date.now() > expTime) {
-						setShowTimeoutModal(true);
 						return;
 					}
 
@@ -83,7 +62,6 @@ export default function AdminShell({ children }: Props) {
 
 		checkAuth();
 
-		// Listen for login/logout from other tabs
 		const onStorage = () => checkAuth();
 		window.addEventListener('storage', onStorage);
 		window.addEventListener('authChange', onStorage);
@@ -94,7 +72,8 @@ export default function AdminShell({ children }: Props) {
 		};
 	}, [router]);
 
-	// Logout handler
+	const toggleSidebar = () => setIsSidebarOpen((s) => !s);
+
 	const handleLogout = () => {
 		localStorage.removeItem('adminAuthToken');
 		localStorage.removeItem('adminUserData');
@@ -105,8 +84,6 @@ export default function AdminShell({ children }: Props) {
 		setUserInitials('');
 		router.push('/admin/login');
 	};
-
-	const toggleSidebar = () => setIsSidebarOpen((s) => !s);
 
 	if (isLoading) {
 		return (
@@ -142,22 +119,6 @@ export default function AdminShell({ children }: Props) {
 
 				<main className='flex-1 overflow-auto '>{children}</main>
 			</div>
-
-			{/* TOKEN EXPIRED MODAL */}
-			<Modal
-				title='Session Expired'
-				open={showTimeoutModal}
-				closable={false}
-				footer={[
-					<Button
-						key='login'
-						type='primary'
-						onClick={handleLogout}>
-						Login Again
-					</Button>,
-				]}>
-				<p>Your session has expired. Please log in again to continue.</p>
-			</Modal>
 		</div>
 	);
 }
