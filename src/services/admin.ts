@@ -60,6 +60,7 @@ export interface ApiResponse {
 }
 
 export interface FormData {
+	id?: number;
 	title: string;
 	content: string;
 	imageUrl: string;
@@ -363,16 +364,26 @@ export const createOrUpdateBlogPost = async (
 ) => {
 	const token = getToken();
 	if (!token) throw new Error('Authentication required. Please log in again.');
+
 	const url =
 		mode === 'create'
 			? `${BASE_URL}/api/admin/post/create`
-			: `${BASE_URL}/api/admin/post/update/${postId}`;
+			: `${BASE_URL}/api/admin/post/update`;
 	const method = mode === 'create' ? 'post' : 'put';
+
+	// Add id to formData for edit mode
+	if (mode === 'edit' && postId !== undefined) {
+		formData.id = postId;
+	}
+
 	const res = await axios({
 		method,
 		url,
 		data: formData,
-		headers: { Authorization: `Bearer ${token}` },
+		headers: {
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json',
+		},
 	});
 	return res.data;
 };

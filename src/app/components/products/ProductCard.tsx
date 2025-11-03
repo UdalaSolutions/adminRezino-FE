@@ -167,14 +167,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
 				{/* Out of Stock Badge */}
 				{product.isOutOfStock && (
-					<div className='absolute top-2 right-0 bg-primaryRed text-white text-xs px-2 py-1 rounded-tl-sm rounded-bl-sm'>
+					<div className='absolute top-2 right-0 bg-primaryRed text-white! text-xs px-2 py-1 rounded-tl-sm rounded-bl-sm'>
 						Out of stock
 					</div>
 				)}
 
 				{/* Discount Badge */}
 				{hasDiscount && (
-					<div className='absolute top-2 left-2 bg-primaryRed text-white text-xs px-2 py-1 rounded'>
+					<div className='absolute top-2 left-2 bg-primaryRed text-white! text-xs px-2 py-1 rounded'>
 						{product.discount}% OFF
 					</div>
 				)}
@@ -191,7 +191,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 			{/* Discount Details */}
 			{product.discountDetails && (
 				<div className='flex justify-between items-center my-2'>
-					<span className='bg-primaryPurple text-white p-3 rounded-lg gap-2.5 text-[10px]'>
+					<span className='bg-primaryPurple text-white! p-3 rounded-lg gap-2.5 text-[10px]'>
 						{product.discountDetails}
 					</span>
 				</div>

@@ -26,7 +26,8 @@ const DEFAULT_FORM: ProductApiPayload = {
 	brand: '',
 };
 
-const categories = [
+// Optional: Keep some common categories for suggestions, but allow free text input
+const commonCategories = [
 	'Cleanser',
 	'Moisturizer',
 	'Serum',
@@ -34,6 +35,13 @@ const categories = [
 	'Treatment',
 	'Mask',
 	'PersonalGrooming',
+	'Toner',
+	'Eye Cream',
+	'Face Oil',
+	'Exfoliator',
+	'Body Lotion',
+	'Shampoo',
+	'Conditioner',
 ];
 
 const EditProductModal: React.FC<EditProductModalProps> = ({
@@ -48,6 +56,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 	const [imageUploading, setImageUploading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [showMore, setShowMore] = useState(false);
+	const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
+	const [filteredCategories, setFilteredCategories] = useState<string[]>([]);
 
 	// Fetch brands from API
 	const [brands, setBrands] = useState<string[]>([]);
@@ -69,7 +79,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 		if (product) {
 			setFormData({
 				productName: product.productName ?? '',
-				productDescription: product.productDescription ?? '', // FIXED KEY
+				productDescription: product.productDescription ?? '',
 				productPrice:
 					product.productPrice ??
 					product.salePrice ??
@@ -100,6 +110,24 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 					? Number(value)
 					: value,
 		}));
+
+		// Handle category suggestions
+		if (name === 'productCategory') {
+			if (value.length > 0) {
+				const filtered = commonCategories.filter((cat) =>
+					cat.toLowerCase().includes(value.toLowerCase())
+				);
+				setFilteredCategories(filtered);
+				setShowCategorySuggestions(filtered.length > 0);
+			} else {
+				setShowCategorySuggestions(false);
+			}
+		}
+	};
+
+	const handleCategorySelect = (category: string) => {
+		setFormData((prev) => ({ ...prev, productCategory: category }));
+		setShowCategorySuggestions(false);
 	};
 
 	const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +154,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 
 	const validateForm = (): string | null => {
 		if (!formData.productName.trim()) return 'Product name is required.';
-		if (!formData.productCategory) return 'Product category is required.';
+		if (!formData.productCategory.trim())
+			return 'Product category is required.';
 		if (!formData.productPrice || formData.productPrice <= 0)
 			return 'Price must be greater than 0.';
 		if (!formData.cartoonQuantity || formData.cartoonQuantity < 0)
@@ -179,10 +208,18 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 		}
 	};
 
+	const handleBackdropClick = (e: React.MouseEvent) => {
+		if (e.target === e.currentTarget) {
+			onClose();
+		}
+	};
+
 	if (!isOpen || !product) return null;
 
 	return (
-		<div className='fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50 flex items-center justify-center p-4'>
+		<div
+			className='fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50 flex items-center justify-center p-4'
+			onClick={handleBackdropClick}>
 			<div className='bg-white rounded-2xl w-full max-w-lg mx-auto overflow-hidden shadow-xl'>
 				<div className='flex justify-end items-center p-2 '>
 					<button
@@ -247,26 +284,64 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 								disabled={isLoading}
 							/>
 						</div>
-						<div>
+						<div className='relative'>
 							<label className='block text-sm font-medium mb-2'>
 								Category *
 							</label>
-							<select
+							<input
+								type='text'
 								name='productCategory'
 								value={formData.productCategory}
 								onChange={handleInputChange}
+								onFocus={() => {
+									if (formData.productCategory.length > 0) {
+										const filtered = commonCategories.filter((cat) =>
+											cat
+												.toLowerCase()
+												.includes(formData.productCategory.toLowerCase())
+										);
+										setFilteredCategories(filtered);
+										setShowCategorySuggestions(filtered.length > 0);
+									}
+								}}
+								onBlur={() =>
+									setTimeout(() => setShowCategorySuggestions(false), 200)
+								}
 								required
-								className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none '
-								disabled={isLoading}>
-								<option value=''>Select category</option>
-								{categories.map((cat) => (
+								className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
+								placeholder='Enter or select category'
+								disabled={isLoading}
+								list='category-suggestions'
+							/>
+
+							{/* Category suggestions dropdown */}
+							{showCategorySuggestions && (
+								<div className='absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto'>
+									{filteredCategories.map((category) => (
+										<button
+											key={category}
+											type='button'
+											className='w-full px-4 py-2 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none'
+											onClick={() => handleCategorySelect(category)}>
+											{category}
+										</button>
+									))}
+								</div>
+							)}
+
+							{/* HTML5 datalist for native browser support */}
+							<datalist id='category-suggestions'>
+								{commonCategories.map((category) => (
 									<option
-										key={cat}
-										value={cat}>
-										{cat}
-									</option>
+										key={category}
+										value={category}
+									/>
 								))}
-							</select>
+							</datalist>
+
+							<p className='text-xs text-gray-500 mt-1'>
+								Type to enter any category or select from suggestions
+							</p>
 						</div>
 						<div>
 							<label className='block text-sm font-medium mb-2'>Price *</label>
@@ -373,7 +448,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 							</button>
 							<button
 								type='submit'
-								className='px-6 py-2 bg-primaryPurple text-white rounded-lg hover:bg-purple-700 transition-colors'
+								className='px-6 py-2 bg-primaryPurple text-white! rounded-lg hover:bg-purple-700 transition-colors'
 								disabled={isLoading || imageUploading}>
 								{isLoading ? 'Saving...' : 'Update Product'}
 							</button>

@@ -25,7 +25,8 @@ const DEFAULT_FORM: ProductApiPayload = {
 	brand: '',
 };
 
-const categories = [
+// Common categories for suggestions
+const commonCategories = [
 	'Cleanser',
 	'Moisturizer',
 	'Serum',
@@ -33,6 +34,13 @@ const categories = [
 	'Treatment',
 	'Mask',
 	'PersonalGrooming',
+	'Toner',
+	'Eye Cream',
+	'Face Oil',
+	'Exfoliator',
+	'Body Lotion',
+	'Shampoo',
+	'Conditioner',
 ];
 
 const AddProductModal: React.FC<AddProductModalProps> = ({
@@ -46,6 +54,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 	const [imageUploading, setImageUploading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [showMore, setShowMore] = useState(false);
+	const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
+	const [filteredCategories, setFilteredCategories] = useState<string[]>([]);
 
 	// Fetch brands
 	const [brands, setBrands] = useState<string[]>([]);
@@ -77,6 +87,24 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 					? Number(value)
 					: value,
 		}));
+
+		// Handle category suggestions
+		if (name === 'productCategory') {
+			if (value.length > 0) {
+				const filtered = commonCategories.filter((cat) =>
+					cat.toLowerCase().includes(value.toLowerCase())
+				);
+				setFilteredCategories(filtered);
+				setShowCategorySuggestions(filtered.length > 0);
+			} else {
+				setShowCategorySuggestions(false);
+			}
+		}
+	};
+
+	const handleCategorySelect = (category: string) => {
+		setFormData((prev) => ({ ...prev, productCategory: category }));
+		setShowCategorySuggestions(false);
 	};
 
 	const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +131,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
 	const validateForm = (): string | null => {
 		if (!formData.productName.trim()) return 'Product name is required.';
-		if (!formData.productCategory) return 'Product category is required.';
+		if (!formData.productCategory.trim())
+			return 'Product category is required.';
 		if (!formData.productPrice || formData.productPrice <= 0)
 			return 'Price must be greater than 0.';
 		if (!formData.cartoonQuantity || formData.cartoonQuantity < 0)
@@ -154,14 +183,33 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 		}
 	};
 
+	const handleBackdropClick = (e: React.MouseEvent) => {
+		if (e.target === e.currentTarget) {
+			onClose();
+		}
+	};
+
+	const resetForm = () => {
+		setFormData(DEFAULT_FORM);
+		setImagePreview(null);
+		setError(null);
+		setShowMore(false);
+		setShowCategorySuggestions(false);
+	};
+
 	if (!isOpen) return null;
 
 	return (
-		<div className='fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50 flex items-center justify-center p-4'>
+		<div
+			className='fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50 flex items-center justify-center p-4'
+			onClick={handleBackdropClick}>
 			<div className='bg-white rounded-2xl w-full max-w-lg mx-auto overflow-hidden shadow-xl'>
 				<div className='flex justify-end items-center p-2 '>
 					<button
-						onClick={onClose}
+						onClick={() => {
+							resetForm();
+							onClose();
+						}}
 						className='p-2 hover:bg-gray-100 rounded-full transition-colors'
 						aria-label='Close modal'
 						disabled={isLoading || imageUploading}>
@@ -208,7 +256,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 						</label>
 					</div>
 					{/* Product Fields */}
-					<div className='grid grid-cols-1  gap-4'>
+					<div className='grid grid-cols-1 gap-4'>
 						<div>
 							<label className='block text-sm font-medium mb-2'>Name *</label>
 							<input
@@ -217,31 +265,69 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 								value={formData.productName}
 								onChange={handleInputChange}
 								required
-								className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none '
+								className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
 								placeholder='Enter product name'
 								disabled={isLoading}
 							/>
 						</div>
-						<div>
+						<div className='relative'>
 							<label className='block text-sm font-medium mb-2'>
 								Category *
 							</label>
-							<select
+							<input
+								type='text'
 								name='productCategory'
 								value={formData.productCategory}
 								onChange={handleInputChange}
+								onFocus={() => {
+									if (formData.productCategory.length > 0) {
+										const filtered = commonCategories.filter((cat) =>
+											cat
+												.toLowerCase()
+												.includes(formData.productCategory.toLowerCase())
+										);
+										setFilteredCategories(filtered);
+										setShowCategorySuggestions(filtered.length > 0);
+									}
+								}}
+								onBlur={() =>
+									setTimeout(() => setShowCategorySuggestions(false), 200)
+								}
 								required
-								className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none '
-								disabled={isLoading}>
-								<option value=''>Select category</option>
-								{categories.map((cat) => (
+								className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
+								placeholder='Enter or select category'
+								disabled={isLoading}
+								list='category-suggestions'
+							/>
+
+							{/* Category suggestions dropdown */}
+							{showCategorySuggestions && (
+								<div className='absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto'>
+									{filteredCategories.map((category) => (
+										<button
+											key={category}
+											type='button'
+											className='w-full px-4 py-2 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none'
+											onClick={() => handleCategorySelect(category)}>
+											{category}
+										</button>
+									))}
+								</div>
+							)}
+
+							{/* HTML5 datalist for native browser support */}
+							<datalist id='category-suggestions'>
+								{commonCategories.map((category) => (
 									<option
-										key={cat}
-										value={cat}>
-										{cat}
-									</option>
+										key={category}
+										value={category}
+									/>
 								))}
-							</select>
+							</datalist>
+
+							<p className='text-xs text-gray-500 mt-1'>
+								Type to enter any category or select from suggestions
+							</p>
 						</div>
 						<div>
 							<label className='block text-sm font-medium mb-2'>Price *</label>
@@ -251,7 +337,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 								value={formData.productPrice}
 								onChange={handleInputChange}
 								required
-								className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
+								className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
 								placeholder='0.00'
 								disabled={isLoading}
 							/>
@@ -267,7 +353,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 								onChange={handleInputChange}
 								required
 								min='0'
-								className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
+								className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
 								placeholder='Enter quantity'
 								disabled={isLoading}
 							/>
@@ -280,7 +366,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 								name='productDescription'
 								value={formData.productDescription}
 								onChange={handleInputChange}
-								className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none resize-none'
+								className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none resize-none'
 								placeholder='Enter product description'
 								rows={1}
 								disabled={isLoading}
@@ -298,7 +384,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 										value={formData.brand}
 										onChange={handleInputChange}
 										required
-										className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none '
+										className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
 										disabled={isLoading}>
 										<option value=''>Select brand</option>
 										{brands.map((brand) => (
@@ -321,7 +407,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 										onChange={handleInputChange}
 										min='0'
 										max='100'
-										className='w-full px-4 py-2  rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none '
+										className='w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-primaryPurple focus:border-transparent bg-background outline-none'
 										placeholder='Enter discount'
 										disabled={isLoading}
 									/>
@@ -341,14 +427,17 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 						<div className='flex justify-end gap-4 pt-2'>
 							<button
 								type='button'
-								onClick={onClose}
+								onClick={() => {
+									resetForm();
+									onClose();
+								}}
 								className='px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors'
 								disabled={isLoading || imageUploading}>
 								Cancel
 							</button>
 							<button
 								type='submit'
-								className='px-6 py-2 bg-primaryPurple text-white rounded-lg hover:bg-purple-700 transition-colors'
+								className='px-6 py-2 bg-primaryPurple text-white! rounded-lg hover:bg-purple-700 transition-colors'
 								disabled={isLoading || imageUploading}>
 								{isLoading ? 'Saving...' : 'Save'}
 							</button>

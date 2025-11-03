@@ -75,7 +75,7 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
 				</div>
 				{/* Out of Stock Badge */}
 				{product.isOutOfStock && (
-					<div className='absolute top-2 right-0 bg-primaryRed text-white text-xs px-2 py-1 rounded-tl-sm rounded-bl-sm'>
+					<div className='absolute top-2 right-0 bg-primaryRed text-white! text-xs px-2 py-1 rounded-tl-sm rounded-bl-sm'>
 						Out of stock
 					</div>
 				)}
@@ -92,7 +92,7 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
 			{/* Discount Badge */}
 			{product.discountDetails && (
 				<div className='flex justify-between items-center my-2'>
-					<span className='bg-primaryPurple text-white p-3 rounded-lg gap-2.5 text-[10px]'>
+					<span className='bg-primaryPurple text-white! p-3 rounded-lg gap-2.5 text-[10px]'>
 						Buy 3, Get 5% Off
 					</span>
 					{product.discountDetails !== 'Buy 3, Get 10% Off' && (
@@ -117,14 +117,14 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
 			<div className='flex gap-2 mt-3'>
 				<button
 					type='button'
-					className='bg-primaryPurple text-white px-3 py-1 rounded text-sm font-bold transition-colors hover:bg-primaryPurple/80'
+					className='bg-primaryPurple text-white! px-3 py-1 rounded text-sm font-bold transition-colors hover:bg-primaryPurple/80'
 					onClick={handleEdit}
 					disabled={isDeleting}>
 					Edit
 				</button>
 				<button
 					type='button'
-					className='bg-primaryRed text-white px-3 py-1 rounded text-sm font-bold transition-colors hover:bg-primaryRed/80 disabled:opacity-50'
+					className='bg-primaryRed text-white! px-3 py-1 rounded text-sm font-bold transition-colors hover:bg-primaryRed/80 disabled:opacity-50'
 					onClick={handleDelete}
 					disabled={isDeleting}>
 					{isDeleting ? 'Deleting...' : 'Delete'}
